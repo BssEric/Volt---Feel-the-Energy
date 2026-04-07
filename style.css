@@ -510,7 +510,7 @@ nav a:hover::after {
 .section-left { text-align: right; }
 
 .section-left h2 {
-    transform: translateX(-3vw); /* Desloca o título para a direita conforme solicitado */
+    transform: translateX(-6vw); /* Desloca o título para a direita conforme solicitado */
     
 }
 
