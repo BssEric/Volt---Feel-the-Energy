@@ -1,0 +1,693 @@
+:root {
+    --bg-color: #050505;
+    --text-main: #ffffff;
+    --font-heading: 'Bebas Neue', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    
+    /* Cores Dinâmicas dos Sabores */
+    --theme-color: #00d4ff; /* Padrão: Thunder */
+    --can-gradient: linear-gradient(90deg, #111 0%, #333 15%, var(--theme-color) 50%, #222 85%, #050505 100%);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: var(--font-body);
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    cursor: none; /* Esconde o cursor padrão */
+}
+
+html {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+/* Lenis Smooth Scroll Essentials */
+html.lenis, html.lenis body {
+  height: auto !important;
+  width: 100% !important;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Noise Overlay para visual cinematográfico */
+.noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Custom Cursor */
+.custom-cursor {
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 100001;
+    mix-blend-mode: difference;
+}
+
+.cursor-follower {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 100000;
+}
+
+/* Preloader Styles */
+.loader {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.loader-content {
+    text-align: center;
+    width: 200px;
+}
+
+.loader-percentage {
+    font-family: var(--font-heading);
+    font-size: 4rem;
+    color: rgb(100, 100, 100);
+    margin-bottom: 10px;
+    font-variant-numeric: tabular-nums;
+}
+
+.loader-bar-container {
+    width: 100%;
+    height: 2px;
+    background: rgb(110, 110, 110);
+    position: relative;
+    overflow: hidden;
+}
+
+.loader-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background-color: rgb(100, 100, 100);
+}
+
+/* Esconder conteúdo inicial para revelação */
+main { opacity: 0; }
+
+/* Background Effects */
+.hero-bg-container {
+    position: absolute;
+    top: -25%; /* Bleed agressivo para garantir que o parallax nunca revele o fundo */
+    left: 0;
+    width: 100%;
+    height: 150%; /* Altura extra para "sobrar" imagem em todas as direções */
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+    will-change: transform, opacity;
+}
+
+.hero-bg {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    min-width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: brightness(0.4) saturate(1.2);
+    transition: transform 1.5s ease-out;
+    backface-visibility: hidden;
+}
+
+.hero-bg-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(5,5,5,0) 0%, rgba(5,5,5,0.2) 50%, rgba(5,5,5,0.8) 80%, var(--bg-color) 100%);
+}
+
+#particle-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100dvh;
+    z-index: -2;
+    pointer-events: none;
+}
+
+.glow-bg {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 80vmin; /* Usa vmin para garantir que o brilho seja proporcional e visível */
+    height: 80vmin;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, var(--theme-color) 0%, transparent 60%);
+    opacity: 0.15;
+    filter: blur(80px);
+    z-index: -1;
+    transition: background 1s ease;
+}
+
+/* Navbar (Glassmorphism) */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.3s ease;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 35px;
+    width: auto;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+}
+
+nav a {
+    position: relative;
+    color: var(--text-main);
+    text-decoration: none;
+    margin-left: 2rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--theme-color);
+    transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+nav a:hover::after {
+    width: 100%;
+}
+
+/* Fake 3D Can */
+.global-can-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5; /* Posicionado atrás das seções de texto (z-index 10+) */
+    perspective: 1000px;
+    pointer-events: none;
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.char {
+    display: inline-block;
+    will-change: transform;
+}
+
+.can-parallax-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+.can-wrapper {
+    position: relative;
+    width: 400px; /* Aumentado para evitar corte lateral em rotações */
+    height: 700px; /* Aumentado para acomodar a flutuação e sombras sem cortar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+}
+
+.can-img {
+    height: 450px;
+    width: auto;
+    position: absolute;
+    left: 50%;
+    /* Múltiplas sombras: 1. Contato inferior, 2. Profundidade lateral (ambient occlusion), 3. Glow dinâmico */
+    filter: drop-shadow(0 45px 35px rgba(0, 0, 0, 0.7))
+            drop-shadow(0 0 30px var(--theme-color)); /* Simplificado para melhorar performance */
+            
+    /* Mantém a suavidade na troca de src se necessário */
+    transition: filter 0.8s ease;
+    display: block;
+    /* Otimização crítica: evita jittering em navegadores baseados em Chromium */
+    will-change: transform, opacity, filter;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateX(-50%) translateZ(0);
+    /* Força o navegador a manter o espaço da imagem mesmo antes de carregar o src */
+    content-visibility: auto;
+}
+
+/* Hero Section */
+.hero {
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    position: relative;
+    z-index: auto;
+    padding: 0 !important;
+    padding-bottom: 8vh !important;
+    overflow: hidden;
+}
+
+.slide-content {
+    text-align: left;
+    z-index: 20; /* À frente da lata */
+    pointer-events: none;
+    padding-left: 5vw;
+}
+
+.beverage-name {
+    font-family: var(--font-heading);
+    font-size: 12vw;
+    line-height: 0.8;
+    letter-spacing: 4px;
+    background: linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-left: -2vw;
+    pointer-events: none;
+    overflow: hidden; /* Garante que o texto suba de "dentro" de uma máscara */
+}
+
+.slogan {
+    font-size: 1rem;
+    color: var(--theme-color);
+    margin: 0.5rem 0 1.5rem;
+    max-width: 400px;
+    transition: color 0.5s ease;
+}
+
+.slider-controls {
+    position: absolute;
+    bottom: 8vh; /* Alinha com a base do texto da esquerda */
+    right: 5vw;  /* Alinha com a margem lateral direita */
+    display: flex;
+    gap: 1rem;   /* Espaçamento entre os botões */
+    z-index: 100;
+    pointer-events: none;
+    top: auto;   /* Remove o posicionamento central anterior */
+    transform: none;
+    width: auto;
+    padding: 0;
+}
+
+.control-btn {
+    pointer-events: auto;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.control-btn:hover {
+    background: var(--theme-color);
+    border-color: var(--theme-color);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+/* Estilo para o ícone quando o menu está aberto */
+.menu-toggle.active span {
+    background: var(--theme-color) !important;
+    box-shadow: 0 0 10px var(--theme-color);
+    transition: background 0.3s ease;
+}
+
+/* Scroll Sections */
+.scroll-sections {
+    position: relative;
+    margin-top: -5px; /* Sobreposição maior para selar frestas de renderização */
+    background-color: transparent;
+    padding-top: 5px;
+}
+
+.text-content {
+    position: relative;
+    z-index: 10;
+}
+
+.story-section {
+    min-height: 102dvh; /* Overlap: 2% extra para garantir que uma seção "entre" na outra sem vácuo */
+    position: relative;
+}
+
+.text-content h2 {
+    font-family: var(--font-heading);
+    font-size: 6rem;
+    line-height: 0.9;
+    margin-bottom: 1.5rem;
+}
+
+.text-content p {
+    max-width: 400px;
+    font-size: 1.1rem;
+    color: #aaa;
+    line-height: 1.6;
+}
+
+/* Bootstrap overrides para manter o estilo Awwwards */
+.section-left { text-align: right; }
+
+.section-left h2 {
+    transform: translateX(-1vw); /* Desloca o título para a direita conforme solicitado */
+    
+}
+
+@media (min-width: 768px) {
+    .section-left .text-content p {
+        margin-left: auto; /* Alinha o bloco do parágrafo à direita da coluna */
+    }
+}
+
+.section-right { text-align: left; }
+
+.final-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60vh;
+    height: 60vh;
+    background: radial-gradient(circle, var(--theme-color) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0;
+    z-index: 1;
+    pointer-events: none;
+    animation: final-pulse 4s ease-in-out infinite;
+}
+
+@keyframes final-pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+    50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.6; }
+}
+
+.final-cta {
+    margin-top: 300px; /* Cria espaço para a lata flutuar acima do texto */
+    position: relative;
+    z-index: 20; /* Garante que o botão e título final fiquem à frente da lata */
+}
+
+.cta-btn {
+    padding: 1rem 3rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 5px;
+    background: var(--text-main);
+    color: var(--bg-color);
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.cta-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(255,255,255,0.2);
+}
+
+.cta-btn.primary {
+    background: var(--theme-color);
+    color: white;
+}
+
+/* Footer Styling */
+footer {
+    position: relative;
+    z-index: 20;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footer-credits {
+    font-size: 0.75rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: 400;
+}
+
+.github-link {
+    color: var(--theme-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.github-link:hover {
+    color: #fff;
+    text-shadow: 0 0 15px var(--theme-color);
+}
+
+/* ========================================= */
+/* RESPONSIVIDADE */
+/* ========================================= */
+
+/* Para telas menores que 768px (tablets em portrait, celulares grandes) */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        z-index: 6000; /* Agora ele fica acima do nav (que é 5000) */
+        cursor: pointer;
+        padding: 10px;
+        margin-right: -10px; /* Compensa o padding para alinhar visualmente à borda */
+    }
+
+    .menu-toggle span {
+        display: block;
+        width: 25px;
+        height: 2px;
+        background: white;
+    }
+
+    .logo img {
+        height: 30px;
+    }
+
+    nav {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100dvh;
+        background: black;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 5000; 
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(10px);
+        /* Estado inicial: Invisível e sem interação */
+        clip-path: circle(0% at calc(100% - 45px) 45px);
+        pointer-events: none;
+        visibility: hidden;
+        transition: none; /* Deletamos a transição CSS para usar apenas GSAP */
+    }
+
+    /* A classe active agora servirá apenas como sinalizador, a animação será via JS */
+
+    nav a {
+        margin: 1.2rem 0;
+        margin-left: 0;
+        font-size: 1.8rem; /* Reduzido para garantir que frases longas caibam em uma linha */
+        letter-spacing: 4px;
+        text-align: center;
+        white-space: nowrap; /* Impede a quebra de linha que causa o desalinhamento */
+        opacity: 0;
+        transform: translateY(30px);
+        width: 100%;
+    }
+
+    /* Centraliza a linha de hover no mobile também */
+    nav a::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .beverage-name {
+        font-size: 15vw; /* Reduzido levemente para evitar overflow lateral */
+        letter-spacing: 2px;
+        margin-left: 0;
+        margin-left: -1.5vw;
+    }
+
+    .hero-footer-info {
+        flex-direction: column; /* Slogan e botão empilham */
+        align-items: flex-start; /* Alinha à esquerda */
+        margin-top: 1rem;
+    }
+
+    .slogan {
+        font-size: 0.9rem;
+        margin-bottom: 1rem; /* Espaço entre slogan e botão */
+        max-width: 90%;
+    }
+
+    .slider-controls {
+        gap: 0.8rem;
+    }
+
+    .control-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 1rem;
+    }
+
+    /* Lata */
+    .can-wrapper {
+        width: 100%; 
+        height: 600px; 
+    }
+
+    .can-img {
+        height: 320px; /* Reduz para garantir que o texto lateral tenha espaço */
+    }
+
+    /* Scroll Sections */
+    .section-left {
+        text-align: right;
+    }
+
+    .section-left h2 {
+        transform: translateX(0); /* Reseta o deslocamento lateral no mobile */
+        transform: translateX(4vw); /* Mantém o deslocamento para a direita também no mobile */
+    }
+
+    .text-content {
+        width: 100%; 
+        width: 90%; 
+        pointer-events: none; /* Garante que o toque passe para elementos abaixo se necessário */
+    }
+
+    .section-left .text-content {
+        margin-left: auto; /* Empurra o bloco de texto para encostar na borda direita */
+    }
+
+    .text-content h2 {
+        font-size: 2.8rem; /* Reduzido para não dominar a tela pequena */
+        margin-bottom: 1rem;
+    }
+
+    .text-content p {
+        font-size: 1rem;
+        max-width: 100%;
+    }
+
+    .final-cta h2 {
+        font-size: 2.2rem; /* Reajustado para melhor alinhamento e leitura */
+        padding: 0 20px;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+    }
+
+    .final-cta {
+        margin-top: 250px; /* Ajuste para a lata centralizada não cobrir o texto */
+    }
+
+    /* Esconder cursor customizado em dispositivos móveis */
+    .custom-cursor, .cursor-follower {
+        display: none !important;
+    }
+    body {
+        cursor: auto;
+    }
+}
+
+/* Para telas menores que 480px (celulares pequenos) */
+@media (max-width: 480px) {
+    .beverage-name {
+        font-size: 18vw; /* Retomando o impacto visual massivo em celulares */
+    }
+
+    .text-content h2 {
+        font-size: 2.2rem;
+    }
+
+    .text-content {
+        width: 85%; /* No celular muito pequeno, o texto precisa de mais espaço */
+    }
+
+    .final-cta h2 {
+        font-size: 1.8rem;
+    }
+}
