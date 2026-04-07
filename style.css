@@ -647,6 +647,25 @@ footer {
         transition: none; /* Deletamos a transição CSS para usar apenas GSAP */
     }
 
+    /* Ajuste do Indicador de Scroll no Mobile */
+    .scroll-indicator {
+        bottom: 20px;
+        gap: 5px;
+    }
+    .mouse-icon {
+        width: 18px;
+        height: 28px;
+        border-width: 1.5px;
+    }
+    .mouse-icon .wheel {
+        width: 1.5px;
+        height: 4px;
+        top: 4px;
+    }
+    .scroll-indicator p {
+        font-size: 0.5rem;
+    }
+
     /* A classe active agora servirá apenas como sinalizador, a animação será via JS */
 
     nav a {
