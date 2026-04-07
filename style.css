@@ -164,6 +164,30 @@ main { opacity: 0; }
     background: linear-gradient(to bottom, rgba(5,5,5,0) 0%, rgba(5,5,5,0.2) 50%, rgba(5,5,5,0.8) 80%, var(--bg-color) 100%);
 }
 
+/* Section Marquee Text */
+.section-marquee {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0.15;
+}
+
+.marquee-inner {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: 18vw;
+    color: transparent;
+    -webkit-text-stroke: 1px #fff;
+    text-transform: uppercase;
+    will-change: transform;
+}
+
 #particle-canvas {
     position: fixed;
     top: 0;
@@ -460,7 +484,7 @@ nav a:hover::after {
 }
 
 .final-cta {
-    margin-top: 300px; /* Cria espaço para a lata flutuar acima do texto */
+    margin-top: 500px; /* Aumentado para empurrar o texto e o botão mais para baixo */
     position: relative;
     z-index: 20; /* Garante que o botão e título final fiquem à frente da lata */
 }
@@ -576,6 +600,8 @@ footer {
         opacity: 0;
         transform: translateY(30px);
         width: 100%;
+        overflow: hidden; /* Necessário para o efeito de revelação vindo de baixo */
+        padding-bottom: 10px; /* Garante que a linha de hover não seja cortada */
     }
 
     /* Centraliza a linha de hover no mobile também */
@@ -661,7 +687,7 @@ footer {
     }
 
     .final-cta {
-        margin-top: 250px; /* Ajuste para a lata centralizada não cobrir o texto */
+        margin-top: 350px; /* Ajuste proporcional para dispositivos móveis */
     }
 
     /* Esconder cursor customizado em dispositivos móveis */

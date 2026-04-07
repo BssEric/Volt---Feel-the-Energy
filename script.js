@@ -208,6 +208,14 @@ function startApp() {
     }, "-=0.8");
     
     initParticles();
+    // Animação do Marquee
+    gsap.to(".marquee-inner", {
+        xPercent: -50,
+        ease: "none",
+        duration: 25,
+        repeat: -1
+    });
+
     animateParticles(); // Inicia o loop de animação apenas UMA vez no início
     ScrollTrigger.refresh(); // Recalcula todos os pontos de animação após o carregamento
 }
@@ -235,12 +243,16 @@ menuTL.to(navMenu, {
 .to(".menu-toggle span:nth-child(1)", { rotation: 45, y: 8, duration: 0.4 }, "-=0.8")
 .to(".menu-toggle span:nth-child(2)", { opacity: 0, duration: 0.2 }, "-=0.8")
 .to(".menu-toggle span:nth-child(3)", { rotation: -45, y: -8, duration: 0.4 }, "-=0.8")
-.to("#nav-menu a", { 
+.to("#nav-menu a", { opacity: 1, y: 0, duration: 0.1 }, "-=0.4")
+.fromTo("#nav-menu a .char", {
+    opacity: 0,
+    y: "100%"
+}, { 
     opacity: 1, 
     y: 0, 
-    stagger: 0.1, 
-    duration: 0.5,
-    ease: "power3.out"
+    stagger: 0.015, 
+    duration: 0.8,
+    ease: "expo.out"
 }, "-=0.4");
 
 menuToggle.addEventListener('click', () => {
@@ -258,9 +270,19 @@ menuToggle.addEventListener('click', () => {
 
 // Fechar menu mobile automaticamente ao clicar em um link (UX improvement)
 document.querySelectorAll('#nav-menu a').forEach(link => {
-    link.addEventListener('click', () => {
+    link.addEventListener('click', (e) => {
+        const targetId = link.getAttribute('href');
+
+        // Intercepta apenas links que apontam para IDs internos
+        if (targetId.startsWith('#') && targetId !== '#') {
+            e.preventDefault();
+
         if (isMenuOpen) {
             menuToggle.click(); // Dispara a lógica de fechamento e animação
+        }
+
+            // Executa a rolagem suave com uma duração maior (mais lenta)
+            lenis.scrollTo(targetId, { duration: 2.2 });
         }
     });
 });
@@ -371,7 +393,7 @@ mm.add({
         isMenuOpen = false;
         menuToggle.classList.remove('active');
         menuTL.pause(0); // Reseta a timeline para o estado inicial
-        gsap.set([navMenu, "#nav-menu a"], { clearProps: "all" }); // Remove estilos inline do GSAP
+        gsap.set([navMenu, "#nav-menu a", "#nav-menu a .char"], { clearProps: "all" }); // Remove estilos inline do GSAP
         lenis.start(); // Garante que o scroll esteja ativo
     }
 
@@ -400,7 +422,7 @@ mm.add({
     })
     .to(".global-can-container", {
         x: "0vw",
-        y: 0,
+        y: "-13vh", // Eleva a lata no final da jornada
         rotationZ: 0,
         rotationY: 0,
         ease: "none"
@@ -450,11 +472,24 @@ class Particle {
         this.size = this.baseSize;
         this.speedY = Math.random() * 2 + 1.5; // Aumentado: velocidade de subida mais intensa
         this.opacity = Math.random() * 0.5;
-        this.speedX = (Math.random() - 0.5) * 0.5; // Movimento lateral suave
+        this.speedX = (Math.random() - 0.5) * 1; 
     }
     update() {
         this.y -= this.speedY;
         this.x += this.speedX;
+
+        // Interação com o Mouse (Repulsão sutil)
+        const dx = mousePos.x - this.x;
+        const dy = mousePos.y - this.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const forceDirectionX = dx / distance;
+        const forceDirectionY = dy / distance;
+        const maxDistance = 150;
+        const force = (maxDistance - distance) / maxDistance;
+        if (distance < maxDistance) {
+            this.x -= forceDirectionX * force * 5;
+            this.y -= forceDirectionY * force * 5;
+        }
 
         // Efeito de Profundidade: Calcula o tamanho com base na altura
         // progress vai de ~1 no fundo da tela até 0 no topo
@@ -472,10 +507,16 @@ class Particle {
     }
 }
 
+let mousePos = { x: -1000, y: -1000 };
+window.addEventListener('mousemove', (e) => {
+    mousePos.x = e.clientX;
+    mousePos.y = e.clientY;
+});
+
 function initParticles() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    const particleCount = window.innerWidth < 768 ? 80 : 200; // Aumentado: mais densidade de partículas
+    const particleCount = window.innerWidth < 768 ? 150 : 500; // Aumentado para uma densidade mais intensa
     particles = [];
     for (let i = 0; i < particleCount; i++) particles.push(new Particle());
 }
