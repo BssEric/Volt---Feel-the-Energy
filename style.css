@@ -738,6 +738,10 @@ footer {
         transform: translateX(4vw); /* Mantém o deslocamento para a direita também no mobile */
     }
 
+    .section-left .text-content p {
+        transform: translateX(1vw); /* Desloca o parágrafo levemente para a direita no mobile */
+    }
+
     .text-content {
         width: 100%; 
         width: 90%; 
