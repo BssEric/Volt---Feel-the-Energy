@@ -650,6 +650,7 @@ footer {
     /* A classe active agora servirá apenas como sinalizador, a animação será via JS */
 
     nav a {
+        display: block; /* Essencial para que overflow: hidden e transform funcionem */
         margin: 1.2rem 0;
         margin-left: 0;
         font-size: 1.8rem; /* Reduzido para garantir que frases longas caibam em uma linha */

@@ -22,7 +22,7 @@ const flavors = [
 // --- SPLIT TEXT ANIMATION ---
 function initSplitText() {
     document.querySelectorAll('.split-text').forEach(el => {
-        const text = el.innerText;
+        const text = el.textContent.trim(); // textContent funciona mesmo com visibility: hidden
         el.innerHTML = text.split('').map(char => 
             `<span class="char">${char === ' ' ? '&nbsp;' : char}</span>`
         ).join('');
