@@ -384,6 +384,64 @@ nav a:hover::after {
     padding: 0;
 }
 
+/* Scroll Indicator Hero */
+.scroll-indicator {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    z-index: 20;
+    opacity: 0.6;
+}
+
+.mouse-icon {
+    width: 22px;
+    height: 35px;
+    border: 2px solid #fff;
+    border-radius: 12px;
+    position: relative;
+}
+
+.mouse-icon .wheel {
+    width: 2px;
+    height: 6px;
+    background: #fff;
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: scroll-wheel 1.6s ease-out infinite;
+}
+
+@keyframes scroll-wheel {
+    0% { transform: translate(-50%, 0); opacity: 1; }
+    100% { transform: translate(-50%, 15px); opacity: 0; }
+}
+
+.scroll-indicator p {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Social Icons Footer */
+.social-icon {
+    color: #fff;
+    font-size: 1.4rem;
+    margin: 0 15px;
+    text-decoration: none;
+    display: inline-block;
+    transition: color 0.3s ease;
+}
+
+.social-icon:hover {
+    color: var(--theme-color);
+}
+
 .control-btn {
     pointer-events: auto;
     background: transparent;
@@ -438,6 +496,7 @@ nav a:hover::after {
     font-size: 6rem;
     line-height: 0.9;
     margin-bottom: 1.5rem;
+    white-space: nowrap;
 }
 
 .text-content p {

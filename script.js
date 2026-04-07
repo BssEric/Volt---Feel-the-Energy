@@ -30,6 +30,18 @@ function initSplitText() {
 }
 initSplitText();
 
+// --- DINAMIC FAVICON ---
+function updateFavicon(color) {
+    const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+        <path d="M50 5 L20 60 H45 L35 95 L75 35 H50 L60 5 Z" fill="${encodeURIComponent(color)}" />
+    </svg>
+    `.trim();
+    
+    const favicon = document.getElementById('favicon');
+    favicon.href = `data:image/svg+xml;utf8,${svg}`;
+}
+
 // --- GERENCIADOR DE CARREGAMENTO ---
 let loadedAssets = 0;
 const totalAssets = (flavors.length * 2) + 1; // Latas + BGs + Logo
@@ -95,6 +107,9 @@ function updateSlide(direction) {
         ease: "power2.inOut" 
     });
 
+    // Atualiza o favicon para a cor do novo sabor
+    updateFavicon(flavor.color);
+
     // Prepara a próxima imagem da lata e o próximo background
     nextCan.src = flavor.image;
     nextBg.src = flavor.bg;
@@ -154,6 +169,7 @@ function startApp() {
     themeState.color = flavor.color;
     sloganEl.textContent = flavor.slogan;
     nameEl.textContent = flavor.name;
+    updateFavicon(flavor.color);
     
     // Garante que as imagens iniciais correspondam ao currentIndex
     activeCan.src = flavor.image;
@@ -337,7 +353,7 @@ window.addEventListener('mousemove', (e) => {
 });
 
 // --- MAGNETIC EFFECT ---
-document.querySelectorAll('.control-btn, .cta-btn, nav a').forEach(btn => {
+document.querySelectorAll('.control-btn, .cta-btn, nav a, .social-icon').forEach(btn => {
     if (isTouchDevice) return;
 
     btn.addEventListener('mousemove', (e) => {
